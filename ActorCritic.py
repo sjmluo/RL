@@ -1,5 +1,6 @@
 import numpy as np
 import random
+from collections import deque
 import gym
 
 import tensorflow as tf
@@ -10,7 +11,7 @@ from keras.layers.merge import Add
 from keras.optimizers import Adam
 
 class ActorCritic:
-    def __init__(self, env, sess, lr=0.001, epsilon=1.0, epsilon_decay=0.995, gamma=0.95):
+    def __init__(self, env, sess, lr=0.001, epsilon=1.0, epsilon_decay=0.995, gamma=0.95, memory_len=2000):
         """
         Parameters:
         -----------
@@ -40,7 +41,7 @@ class ActorCritic:
         self.epsilon_decay = epsilon_decay  # Decay factor for random exploration
         self.gamma = gamma  # discount factor
         
-        self.memory = list()
+        self.memory = deque(maxlen=memory_len)
 
         # Initalise actor
         self.actor_state_input, self.actor_model = self._create_actor_model()
